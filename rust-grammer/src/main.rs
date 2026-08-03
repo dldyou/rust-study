@@ -6,6 +6,7 @@ use std::env; // Rust에서 기본으로 제공하는 std::env 라이브러리 �
 
 mod p3_1; // program1.rs 파일을 모듈로 사용하겠다는 의미
 mod p3_2;
+mod p3_3;
 
 /**
  * Rust의 main 함수
@@ -20,6 +21,7 @@ fn main() -> Result<(), i32> {
     match program.as_str() {
         "3.1" => p3_1::run(),
         "3.2" => p3_2::run(),
+        "3.3" => p3_3::run(),
         _ => println!("Invalid program number"),
     }
 
