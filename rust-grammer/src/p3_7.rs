@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 pub fn run() {
     // ======================================== Vec ========================================
 
@@ -183,4 +185,122 @@ pub fn run() {
     let mut v = vec![4, -5, 1, -3, 2];
     v.sort();
     assert_eq!(v, vec![-5, -3, 1, 2, 4]);
+
+    // ======================================== HashMap ========================================
+
+    let mut map: HashMap<&str, i32> = HashMap::new();
+    map.insert("Jeff", 100);
+    map.insert("Tom", 90);
+    println!("{:?}", map); // 순서 보장 X
+
+    let map = HashMap::from([("Jeff", 100), ("Tom", 90)]);
+    println!("{:?}", map); // 순서 보장 X
+
+    // 벡터로부터 해시맵 생성
+    let name = vec!["Jeff", "Tom", "Josh"];
+    let score = vec![100, 90, 80];
+    // zip: 반복자 2개에 대해 1:1 데이터 짝짓기 해줌 -> 튜플 3개 생김
+    // collect에 의해 HashMap으로 생성
+    let map: HashMap<_, _> = name.into_iter().zip(score.into_iter()).collect(); // _, _로 자동 추론
+    println!("{:?}", map);
+
+    // 데이터 접근
+    let map = HashMap::from([("Jeff", 100), ("Tom", 90), ("Josh", 80)]);
+    // key를 지정해서 get
+    println!("Jeff's score: {}", map.get("Jeff").unwrap());
+
+    for (k, val) in &map {
+        println!("{}: {}", k, val);
+    }
+
+    for k in map.keys() {
+        if k.starts_with("J") {
+            print!("{} ", map.get(k).unwrap());
+        }
+    }
+    println!("");
+
+    // 데이터 갱신
+    let mut map = HashMap::from([("Jeff", 100), ("Tom", 90), ("Josh", 80)]);
+
+    // 덮어쓰기
+    map.insert("Jeff", 50);
+    println!("{:?}", map);
+
+    // 만약 key가 있다면 갱신하지 않고 key가 없는 것에 대해서만 값을 쓰자고 하면 entry(key).or_insert(val) 메서드가 있음
+    let mut map = HashMap::from([("Jeff", 100), ("Tom", 90), ("Josh", 80)]);
+
+    let new_data = [("Jeff", 50), ("Alice", 10)];
+    for (k, v) in &new_data {
+        map.entry(k).or_insert(*v);
+    }
+
+    println!("{:?}", map);
+
+    // entry(key).or_insert(val)은 &val을 return
+    let text = "stay foolish stay hungry";
+    let mut map = HashMap::new();
+
+    for c in text.chars() {
+        let cnt = map.entry(c).or_insert(0);
+        *cnt += 1;
+    }
+    println!("{:?}", map);
+
+    let text = "stay foolish stay hungry";
+    let mut map = HashMap::new();
+
+    for w in text.split_whitespace() {
+        let cnt = map.entry(w).or_insert(0);
+        *cnt += 1;
+    }
+    println!("{:?}", map);
+
+    // 해시맵의 메서드
+    // clear
+    let mut a = HashMap::new();
+    a.insert(1, "a");
+    a.clear();
+    assert!(a.is_empty());
+
+    // contains_key
+    let mut map = HashMap::new();
+    map.insert(1, "a");
+    assert_eq!(map.contains_key(&1), true);
+    assert_eq!(map.contains_key(&2), false);
+
+    // get
+    let mut map = HashMap::new();
+    map.insert(1, "a");
+    assert_eq!(map.get(&1), Some(&"a"));
+    assert_eq!(map.get(&2), None);
+
+    // insert
+    let mut map = HashMap::new();
+    assert_eq!(map.insert(37, "a"), None);
+    assert_eq!(map.is_empty(), false);
+
+    map.insert(37, "b");
+    assert_eq!(map.insert(37, "c"), Some("b"));
+    assert_eq!(map[&37], "c");
+
+    // keys
+    let map = HashMap::from([("a", 1), ("b", 2), ("c", 3)]);
+
+    for key in map.keys() {
+        println!("{key}");
+    }
+
+    // remove
+    let mut map = HashMap::new();
+    map.insert(1, "a");
+    assert_eq!(map.remove(&1), Some("a"));
+    assert_eq!(map.remove(&1), None);
+
+    // values
+    let map = HashMap::from([("a", 1), ("b", 2), ("c", 3)]);
+
+    for val in map.values() {
+        println!("{val}");
+    }
 }
