@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::collections::HashSet;
 
 pub fn run() {
     // ======================================== Vec ========================================
@@ -303,4 +304,56 @@ pub fn run() {
     for val in map.values() {
         println!("{val}");
     }
+
+    // ======================================== HashSet ========================================
+
+    // 해시셋 선언과 생성
+    let mut set = HashSet::new();
+
+    set.insert(1);
+    set.insert(2);
+    set.insert(3);
+    set.insert(3);
+    set.insert(4);
+    set.insert(5);
+    println!("{:?}", set);
+
+    // 배열 / 벡터로부터 해시셋 생성
+    let set = HashSet::from([1, 2, 3, 3, 4, 5]);
+    println!("{:?}", set);
+
+    // sorting된 상태로 출력하고 싶다면
+    let mut set = HashSet::from([1, 2, 3]);
+    set.extend([3, 4, 5].iter());
+    println!("{:?}", set);
+
+    let mut v: Vec<_> = set.into_iter().collect();
+    v.sort();
+    println!("{:?}", v);
+
+    // 해시셋 데이터로의 접근
+    let set = HashSet::from([1, 2, 3, 3, 4, 5]);
+    let mut v: Vec<i32> = Vec::new();
+    for x in set.iter() {
+        if *x % 2 == 0 {
+            v.push(*x);
+        }
+    }
+    println!("{:?}", v);
+
+    let set = HashSet::from([1, 2, 3, 3, 4, 5]);
+    let v: Vec<_> = set.iter().filter(|x| *x % 2 == 0).collect();
+    println!("{:?}", v);
+
+    // 집합
+    let a = HashSet::from([1, 2, 3, 4]);
+    let b = HashSet::from([3, 4, 5]);
+
+    let u: Vec<_> = a.union(&b).collect();
+    let i: Vec<_> = a.intersection(&b).collect();
+    let d: Vec<_> = a.difference(&b).collect();
+
+    println!("union={:?}", u);
+    println!("intersection={:?}", i);
+    println!("difference={:?}", d);
 }
