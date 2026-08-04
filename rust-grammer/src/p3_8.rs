@@ -1,4 +1,6 @@
 pub fn run() {
+    // ======================================== &str ========================================
+
     // Rust에서의 문자열은 항상 utf-8 인코딩 사용
     let s = "Hello, World!"; // s는 &str 타입 변수
     println!("len={}", s.len());
@@ -81,6 +83,110 @@ pub fn run() {
     // to_lowercase
     let s = "HELLO";
     assert_eq!("hello", s.to_lowercase());
+
+    // ======================================== String ========================================
+
+    // hello 변수는 stack에 저장되지만 실제 문자값들은 힙 메모리에 저장
+    let hello = String::from("Hello, World!");
+    println!("{}", hello);
+
+    // &str 에서 String 생성 (to_owned, to_string)
+    let s1 = "Hello, ".to_owned();
+    let s2 = "World!".to_string();
+    println!("{}{}", s1, s2);
+
+    // 문자열 합치기 String이 주체가 되어 &str을 합침. 앞쪽에는 String 타입이어야 함.
+    // push_str
+    let mut s = String::from("foo");
+    s.push_str("bar");
+    assert_eq!("foobar", s);
+
+    // +
+    let a: String = String::from("foo");
+    let b: String = String::from("bar");
+    let c = a + &b; // a의 소유권이 c로 이동되어 더 이상 변수 a로의 접근 불가
+
+    println!("c={}", c);
+
+    // format
+    let a: String = String::from("foo");
+    let b: String = String::from("bar");
+    let c = format!("{}{}", &a, &b);
+    println!("c={}", c);
+
+    let c = format!("{}{}", "foo", "bar");
+    println!("c={}", c);
+
+    let c = format!("{}{}", a, b);
+    println!("c={}", c);
+    println!("a={}", a);
+
+    // String 메서드
+    // as_bytes
+    let s = String::from("hello");
+    assert_eq!(&[104, 101, 108, 108, 111], s.as_bytes());
+
+    // as_str
+    let s = String::from("foo");
+    assert_eq!("foo", s.as_str());
+
+    // clear
+    let mut s = String::from("foo");
+    s.clear();
+
+    assert!(s.is_empty());
+    assert_eq!(0, s.len());
+    assert_eq!(3, s.capacity());
+
+    // from_utf8
+    let sparkle_heart = vec![240, 159, 146, 150];
+    let sparkle_heart = String::from_utf8(sparkle_heart).unwrap();
+    println!("{}", sparkle_heart);
+    assert_eq!("💖", sparkle_heart);
+
+    // insert
+    let mut s = String::with_capacity(3);
+    s.insert(0, 'f');
+    s.insert(1, 'o');
+    s.insert(2, 'o');
+
+    assert_eq!("foo", s);
+
+    // insert_str
+    let mut s = String::from("bar");
+    s.insert_str(0, "foo");
+    assert_eq!("foobar", s);
+
+    // into_bytes
+    let s = String::from("hello");
+    let bytes = s.into_bytes();
+
+    println!("{:?} {:?}", bytes, &bytes[..]);
+    assert_eq!(&[104, 101, 108, 108, 111][..], &bytes[..]);
+
+    // push
+    let mut s = String::from("abc");
+    s.push('1');
+    s.push('2');
+    s.push('3');
+
+    assert_eq!("abc123", s);
+
+    // push_str
+    let mut s = String::from("foo");
+    s.push_str("bar");
+    assert_eq!("foobar", s);
+
+    // remove
+    let mut s = String::from("abc");
+    assert_eq!(s.remove(0), 'a');
+    assert_eq!(s.remove(1), 'c');
+    assert_eq!(s.remove(0), 'b');
+
+    // truncate
+    let mut s = String::from("hello");
+    s.truncate(2);
+    assert_eq!("he", s);
 }
 
 fn get_number(s: &str) -> Vec<u32> {
