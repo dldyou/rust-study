@@ -77,11 +77,11 @@ pub fn run() {
     println!("s2={}", s2);
 
     // 각 구성원들은 Copy 트레잇이 구현되어 있어야 함
-    #[derive(Copy, Clone)]
-    struct Point {
-        x: i32,
-        y: i32,
-    }
+    // #[derive(Copy, Clone)]
+    // struct Point {
+    //     x: i32,
+    //     y: i32,
+    // }
 
     // Vec는 힙 메모리에 데이터가 저장되는 타입으로 Copy 트레잇이 구현되어 있지 않다.
     // #[derive(Copy, Clone)] //error
