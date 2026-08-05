@@ -14,6 +14,7 @@ mod p3_7;
 mod p3_8;
 mod p3_9;
 mod p4_1;
+mod p4_2;
 
 /**
  * Rust의 main 함수
@@ -36,6 +37,7 @@ fn main() -> Result<(), i32> {
         "3.8" => p3_8::run(),
         "3.9" => p3_9::run(),
         "4.1" => p4_1::run(),
+        "4.2" => p4_2::run(),
         _ => println!("Invalid program number"),
     }
 
