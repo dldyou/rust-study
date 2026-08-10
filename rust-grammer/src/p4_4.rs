@@ -136,7 +136,7 @@ fn print_distance<T: PointOp>(p: &T) {
 }
 
 // 트레잇 바운드는 제네릭 타입을 정의하는 부분에 <T: PointOp>라고 할 수도 있고 where를 써서 표현할 수도 있다.
-fn min<T>(a: T, b: T) -> T
+fn _min<T>(a: T, b: T) -> T
 where
     T: std::cmp::PartialOrd,
 {
@@ -167,43 +167,43 @@ impl Iterator for Counter {
 }
 
 // 연관 타입이 여러 개인 경우
-struct Node {
-    id: i32,
-    name: String,
-    value: i32,
-}
+// struct Node {
+//     id: i32,
+//     name: String,
+//     value: i32,
+// }
 
-struct Edge {
-    start: Node,
-    end: Node,
-}
+// struct Edge {
+//     start: Node,
+//     end: Node,
+// }
 
-struct MyGraph {}
+// struct MyGraph {}
 
-impl Graph for MyGraph {
-    type N = Node;
-    type E = Edge;
+// impl Graph for MyGraph {
+//     type N = Node;
+//     type E = Edge;
 
-    fn get_value(&self, n: &Self::N) -> i32 {
-        return n.value;
-    }
+//     fn get_value(&self, n: &Self::N) -> i32 {
+//         return n.value;
+//     }
 
-    fn edges(&self, n: &Self::N) -> Vec<Self::E> {
-        todo!()
-    }
-}
+//     fn edges(&self, _n: &Self::N) -> Vec<Self::E> {
+//         todo!()
+//     }
+// }
 
-trait Graph {
-    type N;
-    type E;
+// trait Graph {
+//     type N;
+//     type E;
 
-    fn get_value(&self, n: &Self::N) -> i32;
-    fn edges(&self, n: &Self::N) -> Vec<Self::E>;
-}
+//     fn get_value(&self, n: &Self::N) -> i32;
+//     fn edges(&self, n: &Self::N) -> Vec<Self::E>;
+// }
 
-fn distance<G: Graph>(g: &G, s: &G::N, e: &G::N) -> i32 {
-    g.get_value(e) - g.get_value(s)
-}
+// fn distance<G: Graph>(g: &G, s: &G::N, e: &G::N) -> i32 {
+//     g.get_value(e) - g.get_value(s)
+// }
 
 struct Human;
 struct Dog;
@@ -254,7 +254,7 @@ pub fn run() {
     println!("a={}", a);
 
     let a = String::from("aa");
-    let b = a;
+    let _b = a;
 
     println!("CONST_DEFAULT={}", ExStruct::CONST_DEFAULT);
     println!("CONST_NO_DEFAULT={}", ExStruct::CONST_NO_DEFAULT);
