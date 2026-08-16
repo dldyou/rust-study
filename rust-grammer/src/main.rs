@@ -20,6 +20,9 @@ mod p4_4;
 mod p4_5;
 mod p4_6;
 mod p4_7;
+mod p4_8;
+use crate::garden::vegetables;
+mod garden;
 
 /**
  * Rust의 main 함수
@@ -48,6 +51,11 @@ fn main() -> Result<(), i32> {
         "4.5" => p4_5::run(),
         "4.6" => p4_6::run(),
         "4.7" => p4_7::run(),
+        "4.8" => {
+            let plant = vegetables::Asparagus {};
+            println!("I'm growing {:?}", plant);
+            p4_8::run();
+        }
         _ => println!("Invalid program number"),
     }
 
