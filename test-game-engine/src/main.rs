@@ -22,11 +22,11 @@ trait Game {
     }
 }
 
-struct NumberBaseball {
+struct TestGame {
     context: GameContext,
 }
 
-impl Game for NumberBaseball {
+impl Game for TestGame {
     fn context(&self) -> &GameContext {
         &self.context
     }
@@ -47,6 +47,7 @@ impl Game for NumberBaseball {
 }
 
 fn run(game: &mut dyn Game) {
+    println!("Game: {}", game.name());
     while game.is_running() {
         game.update(1.0 / 60.0);
         game.render();
@@ -56,12 +57,12 @@ fn run(game: &mut dyn Game) {
 fn main() {
     // let mut rng = rand::rng();
     let mut context = GameContext {
-        name: String::from("Number Baseball"),
+        name: String::from("Test Game"),
         running: true,
         elapsed_time: 0.0,
     };
 
-    let mut game = NumberBaseball { context };
+    let mut game = TestGame { context };
 
     run(&mut game);
 }
