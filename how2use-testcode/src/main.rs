@@ -1,4 +1,4 @@
-mod arithmetic_operation;
+// mod arithmetic_operation;
 mod danmaku;
 
 use danmaku::{Bounds, Spawner, SpiralPattern, Vec2, World};
