@@ -233,3 +233,46 @@ impl World {
         &self.bullets
     }
 }
+
+#[cfg(test)]
+mod test_utils {
+    use super::*;
+
+    // approx crate에 assert_relative_eq!가 존재함. 허용오차 epsilon 지정 가능
+    pub fn float_eq(actual: f32, expected: f32) {
+        assert!(
+            (actual - expected).abs() < 1e-6,
+            "expected {expected}, got {actual}"
+        );
+    }
+
+    pub fn vec2_eq(actual: Vec2, expected: Vec2) {
+        float_eq(actual.x, expected.x);
+        float_eq(actual.y, expected.y);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    mod vec2 {
+        use super::*;
+
+        #[test]
+        fn add() {
+            test_utils::vec2_eq(
+                Vec2::new(10.0, 20.0) + Vec2::new(20.0, 25.0),
+                Vec2::new(30.0, 45.0),
+            );
+        }
+
+        #[test]
+        fn minus() {
+            test_utils::vec2_eq(
+                Vec2::new(10.0, 20.0) - Vec2::new(20.0, 25.0),
+                Vec2::new(-10.0, -5.0),
+            );
+        }
+    }
+}
