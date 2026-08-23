@@ -129,28 +129,52 @@ pub trait Pattern {
     fn emit(&mut self, origin: Vec2) -> Vec<Bullet>;
 }
 
-pub struct SpiralPattern {
+pub struct IntervalMultipleSpiral {
     angle: f32,
     angle_step: f32,
     speed: f32,
+    shoot_count: i32,
+    interval: i32,
+    time: i32,
 }
 
-impl SpiralPattern {
-    pub fn new(start_angle: f32, angle_step: f32, speed: f32) -> Self {
+impl IntervalMultipleSpiral {
+    pub fn new(
+        start_angle: f32,
+        angle_step: f32,
+        speed: f32,
+        shoot_count: i32,
+        interval: i32,
+    ) -> Self {
         Self {
             angle: start_angle,
             angle_step,
             speed,
+            shoot_count,
+            interval,
+            time: 0,
         }
     }
 }
 
-impl Pattern for SpiralPattern {
+impl Pattern for IntervalMultipleSpiral {
     fn update(&mut self, dt: f32) {
         self.angle = (self.angle + self.angle_step * dt).rem_euclid(360.0);
     }
     fn emit(&mut self, origin: Vec2) -> Vec<Bullet> {
-        vec![Bullet::new(origin, self.angle, self.speed)]
+        let mut bullets = Vec::<Bullet>::new();
+        if self.time == 0 {
+            for i in 0..self.shoot_count {
+                let bullet = Bullet::new(
+                    origin,
+                    self.angle + (i as f32 / self.shoot_count as f32) * 360.0,
+                    self.speed,
+                );
+                bullets.push(bullet);
+            }
+            self.time = (self.time + 1) % self.interval;
+        }
+        bullets
     }
 }
 

@@ -1,21 +1,15 @@
 // mod arithmetic_operation;
 mod danmaku;
 
-use danmaku::{Bounds, Spawner, SpiralPattern, Vec2, World};
+use danmaku::{Bounds, IntervalMultipleSpiral, Spawner, Vec2, World};
 use macroquad::prelude::*;
 
 #[macroquad::main("Danmaku")]
 async fn main() {
     let mut world = World::new();
     let mut spawner = Spawner::new(
-        Box::new(SpiralPattern::new(0.0, 400.0, 150.0)),
-        0.02,
-        Vec2::new(screen_width() / 2.0, screen_height() / 2.0),
-    );
-
-    let mut spawner2 = Spawner::new(
-        Box::new(SpiralPattern::new(180.0, 400.0, 150.0)),
-        0.02,
+        Box::new(IntervalMultipleSpiral::new(0.0, 200.0, 100.0, 4, 1)),
+        0.1,
         Vec2::new(screen_width() / 2.0, screen_height() / 2.0),
     );
 
@@ -29,7 +23,6 @@ async fn main() {
         ));
 
         spawner.tick(dt, &mut world);
-        spawner2.tick(dt, &mut world);
 
         clear_background(BLACK);
 
