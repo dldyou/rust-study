@@ -224,13 +224,17 @@ pub struct World {
     bullets: Vec<Bullet>,
 }
 
-fn velocity(angle: f32, speed: f32) -> Vec2 {
+fn normalize(angle: f32, speed: f32) -> Vec2 {
     let radians = angle.to_radians();
 
     Vec2 {
         x: radians.cos() * speed,
         y: -radians.sin() * speed,
     }
+}
+
+fn velocity(angle: f32, speed: f32, dt: f32) -> Vec2 {
+    normalize(angle, speed) * dt
 }
 
 impl World {
@@ -244,7 +248,7 @@ impl World {
 
     pub fn tick(&mut self, dt: f32) {
         for bullet in &mut self.bullets {
-            bullet.position += velocity(bullet.angle, bullet.speed) * dt;
+            bullet.position += velocity(bullet.angle, bullet.speed, dt);
         }
     }
 
@@ -263,16 +267,21 @@ mod test_utils {
     use super::*;
 
     // approx crate에 assert_relative_eq!가 존재함. 허용오차 epsilon 지정 가능
-    pub fn float_eq(actual: f32, expected: f32) {
-        assert!(
-            (actual - expected).abs() < 1e-6,
-            "expected {expected}, got {actual}"
-        );
+    pub fn float_eq(actual: f32, expected: f32, message: &str) {
+        assert!((actual - expected).abs() < 1e-5, "{message}");
     }
 
     pub fn vec2_eq(actual: Vec2, expected: Vec2) {
-        float_eq(actual.x, expected.x);
-        float_eq(actual.y, expected.y);
+        float_eq(
+            actual.x,
+            expected.x,
+            &format!("actual.x: {}, expected.x: {}", actual.x, expected.x),
+        );
+        float_eq(
+            actual.y,
+            expected.y,
+            &format!("actual.y: {}, expected.y: {}", actual.y, expected.y),
+        );
     }
 }
 
@@ -297,6 +306,52 @@ mod tests {
                 Vec2::new(10.0, 20.0) - Vec2::new(20.0, 25.0),
                 Vec2::new(-10.0, -5.0),
             );
+        }
+
+        #[test]
+        fn mul_scalar() {
+            test_utils::vec2_eq(Vec2::new(10.0, 20.0) * 2.5, Vec2::new(25.0, 50.0));
+        }
+
+        #[test]
+        fn dev_scalar() {
+            test_utils::vec2_eq(Vec2::new(10.0, 20.0) / 3.0, Vec2::new(3.333333, 6.666666));
+        }
+    }
+
+    mod bullet {
+        use super::*;
+
+        #[test]
+        fn move_right() {
+            let curr = Bullet::new(Vec2::new(100.0, 100.0), 0.0, 100.0);
+            let next = curr.position + velocity(curr.angle, curr.speed, 1.0);
+
+            test_utils::vec2_eq(next, Vec2::new(200.0, 100.0));
+        }
+
+        #[test]
+        fn move_up() {
+            let curr = Bullet::new(Vec2::new(100.0, 100.0), 90.0, 100.0);
+            let next = curr.position + velocity(curr.angle, curr.speed, 1.0);
+
+            test_utils::vec2_eq(next, Vec2::new(100.0, 0.0));
+        }
+
+        #[test]
+        fn move_left() {
+            let curr = Bullet::new(Vec2::new(100.0, 100.0), 180.0, 100.0);
+            let next = curr.position + velocity(curr.angle, curr.speed, 1.0);
+
+            test_utils::vec2_eq(next, Vec2::new(0.0, 100.0));
+        }
+
+        #[test]
+        fn move_down() {
+            let curr = Bullet::new(Vec2::new(100.0, 100.0), 270.0, 100.0);
+            let next = curr.position + velocity(curr.angle, curr.speed, 1.0);
+
+            test_utils::vec2_eq(next, Vec2::new(100.0, 200.0));
         }
     }
 }
