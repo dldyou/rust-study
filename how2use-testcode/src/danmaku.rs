@@ -237,6 +237,14 @@ fn velocity(angle: f32, speed: f32, dt: f32) -> Vec2 {
     normalize(angle, speed) * dt
 }
 
+fn kahan_add(sum: &mut f32, correction: &mut f32, value: f32) {
+    let corrected_value = value - *correction;
+    let next_sum = *sum + corrected_value;
+
+    *correction = (next_sum - *sum) - corrected_value;
+    *sum = next_sum;
+}
+
 impl World {
     pub fn new() -> Self {
         Self::default()
@@ -352,6 +360,37 @@ mod tests {
             let next = curr.position + velocity(curr.angle, curr.speed, 1.0);
 
             test_utils::vec2_eq(next, Vec2::new(100.0, 200.0));
+        }
+
+        #[test]
+        fn move_n_secs_m_fps() {
+            let total_time: i32 = 100;
+            let fps: i32 = 60;
+            let steps: i32 = total_time * fps;
+            let curr = Bullet::new(Vec2::new(100.0, 100.0), 270.0, 100.0);
+            let mut next = curr;
+            let expected = Bullet::new(
+                curr.position + velocity(curr.angle, curr.speed, total_time as f32),
+                curr.angle,
+                curr.speed,
+            );
+
+            let mut correction_x = 0.0;
+            let mut correction_y = 0.0;
+            for i in 1..=steps {
+                kahan_add(
+                    &mut next.position.x,
+                    &mut correction_x,
+                    velocity(curr.angle, curr.speed, total_time as f32 / steps as f32).x,
+                );
+                kahan_add(
+                    &mut next.position.y,
+                    &mut correction_y,
+                    velocity(curr.angle, curr.speed, total_time as f32 / steps as f32).y,
+                );
+            }
+
+            test_utils::vec2_eq(next.position, expected.position);
         }
     }
 }
