@@ -10,4 +10,5 @@ Rust를 공부하며 진행하는 간단한 프로젝트 모음집
 | [guess-number](./guess-number/)         | 숫자 맞추기 게임을 만들어봅니다.      | 2026-08-08   |
 | [test-game-engine](./test-game-engine/) | 테스트용 게임 엔진 틀을 만들어봅니다. | 2026-08-17   |
 | [how2use-testcode](./how2use-testcode/) | 테스트 코드 작성법을 공부합니다.      | 2026-08-20   |
-| [calculator](./calculator/)             | 계산기를 만들어봅니다                 | 2026-10-13   |
+| [calculator](./calculator/)             | 계산기를 만들어봅니다.                | 2026-10-13   |
+| [input-output](./input-output/)         | 입출력 방식을 정리해봅니다.           |
